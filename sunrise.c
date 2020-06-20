@@ -41,10 +41,14 @@ done
 
 
 #include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include "cron.h"
 
 
 
@@ -224,8 +228,8 @@ double calcHourAngleSunset(double lat, double solarDec)
 
 double calcJD(struct tm* t)
 {
-    int year = t->tm_year;
-    int month = t->tm_mon;
+    int year = t->tm_year + 1900;
+    int month = t->tm_mon + 1;
     int day = t->tm_mday;
     if (month <= 2) {
         year -= 1;
@@ -343,23 +347,33 @@ int same_second(struct tm* a, struct tm* b)
 
 int _calc(struct tm* tm, double lat, double lon, double(*calcfn)(double,double,double) )
 {
+    struct tm midnight;
     float JD = calcJD(tm);
-    time_t seconds = mktime(tm);
     struct tm localsr, ptm;
     int delta;
 
+    memcpy(&midnight,tm,sizeof(struct tm));
+    midnight.tm_hour=0;
+    midnight.tm_min=0;
+    midnight.tm_sec=0;
+    midnight.tm_isdst=-1;
+
+    time_t seconds = mktime(&midnight);
+
     if (&ptm != gmtime_r ( &seconds, &ptm ))
     {
+        log_it("CRON",getpid(),"ERROR","error calculating gmtime, can't determine sun phase");
         return 0;
     }
 
-    delta= ptm.tm_hour;
+    delta = ptm.tm_hour;
 
-    seconds = seconds + calcSunriseUTC( JD,  lat,  lon)*60;
+    seconds = seconds + calcfn( JD,  lat,  lon)*60;
     seconds = seconds - delta*3600;
 
     if (&localsr != localtime_r(&seconds,&localsr))
     {
+        log_it("CRON",getpid(),"ERROR","error calculating localtime, can't determine sun phase");
         return 0;
     }
 
@@ -376,5 +390,4 @@ int sunrise(struct tm* tm, double lat, double lon)
 {
     return _calc(tm,lat,lon,&calcSunriseUTC);
 }
-
 

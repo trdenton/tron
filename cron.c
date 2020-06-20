@@ -60,6 +60,7 @@ usage() {
 	exit(ERROR_EXIT);
 }
 
+void print_sunrise(double,double);
 
 int
 main(argc, argv)
@@ -70,6 +71,7 @@ main(argc, argv)
 	char	*cs;
 
 	ProgramName = basename(argv[0]);
+
 
 #if defined(BSD)
 	setlinebuf(stdout);
@@ -110,6 +112,7 @@ main(argc, argv)
 		strncpy(cron_default_mail_charset, cs, MAX_ENVSTR);
 	else
 		strcpy( cron_default_mail_charset, "US-ASCII");
+
 
 	/* if there are no debug flags turned on, fork as a daemon should.
 	 */
@@ -342,9 +345,10 @@ find_jobs(vtime, db, doWild, doNonWild)
 			Debug(DSCH|DEXT, ("user [%s:%d:%d:...] cmd=\"%s\"\n",
 			    env_get("LOGNAME", e->envp),
 			    e->uid, e->gid, e->cmd))
-            if (e->flags & AT_SUNRISE && sunrise(tm,49.89507,-97.138451)) {
+            //TODO use env vars for lat, long
+            if (e->flags & AT_SUNRISE && sunrise(tm,49.89507,97.138451)) {
                 job_add(e,u);
-            } else if (e->flags & AT_SUNSET && sunset(tm,49.89507,-97.138451)) {
+            } else if (e->flags & AT_SUNSET && sunset(tm,49.89507,97.138451)) {
                 job_add(e,u);
             } else if (bit_test(e->minute, minute) &&
 			    bit_test(e->hour, hour) &&
