@@ -1,0 +1,49 @@
+Source: cron
+Section: admin
+Priority: important
+Maintainer: Javier Fernández-Sanguino Peña <jfs@debian.org>
+Uploaders: Christian Kastner <ckk@debian.org>
+Standards-Version: 4.3.0
+Build-Depends:
+    debhelper-compat (= 12),
+    libpam0g-dev,
+    libselinux1-dev [linux-any],
+    libaudit-dev [linux-any]
+Rules-Requires-Root: no
+Homepage: https://ftp.isc.org/isc/cron/
+Vcs-Git: https://salsa.debian.org/debian/cron.git
+Vcs-Browser: https://salsa.debian.org/debian/cron
+
+Package: cron
+Architecture: any
+Multi-Arch: foreign
+Pre-Depends:
+    ${misc:Pre-Depends},
+Depends:
+    ${shlibs:Depends},
+    ${misc:Depends},
+    debianutils (>= 1.7),
+    sensible-utils,
+    adduser,
+    lsb-base (>= 3.0-10),
+    libpam-runtime (>= 1.0.1-11)
+Recommends:
+    default-mta | mail-transport-agent
+Suggests:
+    anacron (>= 2.0-1),
+    logrotate,
+    checksecurity
+Provides: cron-daemon
+Description: process scheduling daemon
+ The cron daemon is a background process that runs particular programs at
+ particular times (for example, every minute, day, week, or month), as
+ specified in a crontab. By default, users may also create crontabs of
+ their own so that processes are run on their behalf.
+ .
+ Output from the commands is usually mailed to the system administrator
+ (or to the user in question); you should probably install a mail system
+ as well so that you can receive these messages.
+ .
+ This cron package does not provide any system maintenance tasks. Basic
+ periodic maintenance tasks are provided by other packages, such
+ as checksecurity.
