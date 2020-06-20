@@ -342,7 +342,11 @@ find_jobs(vtime, db, doWild, doNonWild)
 			Debug(DSCH|DEXT, ("user [%s:%d:%d:...] cmd=\"%s\"\n",
 			    env_get("LOGNAME", e->envp),
 			    e->uid, e->gid, e->cmd))
-			if (bit_test(e->minute, minute) &&
+            if (e->flags & AT_SUNRISE && sunrise(tm,49.89507,-97.138451)) {
+                job_add(e,u);
+            } else if (e->flags & AT_SUNSET && sunset(tm,49.89507,-97.138451)) {
+                job_add(e,u);
+            } else if (bit_test(e->minute, minute) &&
 			    bit_test(e->hour, hour) &&
 			    bit_test(e->month, month) &&
 			    ( ((e->flags & DOM_STAR) || (e->flags & DOW_STAR))

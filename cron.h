@@ -190,6 +190,8 @@ typedef	struct _entry {
 #define	WHEN_REBOOT	0x04
 #define	MIN_STAR	0x08
 #define	HR_STAR		0x10
+#define	AT_SUNRISE		0x20
+#define	AT_SUNSET		0x30
 } entry;
 
 			/* the crontab database will be a list of the
@@ -255,6 +257,8 @@ int		job_runqueue __P((void)),
 		strdtb __P((char *));
 
 long		get_gmtoff(time_t *, struct tm *);
+int		    sunrise(struct tm*, double, double );
+int		    sunset(struct tm*, double, double );
 
 char		*env_get __P((char *, char **)),
 		*arpadate __P((time_t *)),

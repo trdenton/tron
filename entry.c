@@ -163,7 +163,11 @@ load_entry(file, error_func, pw, envp)
 			bit_nset(e->month, 0, (LAST_MONTH-FIRST_MONTH+1));
 			bit_nset(e->dow, 0, (LAST_DOW-FIRST_DOW+1));
 			e->flags |= HR_STAR;
-		} else {
+		} else if (!strcmp("sunset", cmd)) {
+            e->flags |= AT_SUNSET;
+        } else if (!strcmp("sunrise", cmd)) {
+            e->flags |= AT_SUNRISE;
+        } else {
 			ecode = e_timespec;
 			goto eof;
 		}
