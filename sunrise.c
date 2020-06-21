@@ -333,7 +333,7 @@ double calcSunsetUTC(double JD, double latitude, double longitude)
     return timeUTC;
 }
 
-int same_second(struct tm* a, struct tm* b)
+int same_minute(struct tm* a, struct tm* b)
 {
     if (!a || !b)
         return 0;
@@ -341,8 +341,7 @@ int same_second(struct tm* a, struct tm* b)
             a->tm_mon == b->tm_mon &&
             a->tm_mday == b->tm_mday &&
             a->tm_hour == b->tm_hour &&
-            a->tm_min == b->tm_min &&
-            a->tm_sec == b->tm_sec);
+            a->tm_min == b->tm_min);
 }
 
 int _calc(struct tm* tm, double lat, double lon, double(*calcfn)(double,double,double) )
@@ -377,7 +376,7 @@ int _calc(struct tm* tm, double lat, double lon, double(*calcfn)(double,double,d
         return 0;
     }
 
-    return same_second(tm,&localsr);
+    return same_minute(tm,&localsr);
 }
 
 int sunset(struct tm* tm, double lat, double lon)
