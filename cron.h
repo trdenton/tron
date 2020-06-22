@@ -190,8 +190,8 @@ typedef	struct _entry {
 #define	WHEN_REBOOT	0x04
 #define	MIN_STAR	0x08
 #define	HR_STAR		0x10
-#define	AT_SUNRISE		0x20
-#define	AT_SUNSET		0x30
+#define	AT_SUNRISE	0x20
+#define	AT_SUNSET	0x40
 } entry;
 
 			/* the crontab database will be a list of the
