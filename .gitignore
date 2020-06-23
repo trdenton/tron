@@ -1,3 +1,4 @@
 *.o
 cron
 crontab
+tags
