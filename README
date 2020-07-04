@@ -1,3 +1,20 @@
+# tron
+
+A patched version of debian's "Vixie cron" to allow for @sunrise and @sunset
+
+Motivation: for scheduling parameter changes in Zoneminder.  Also, just a fun project.
+
+set env vars LATITUDE (degrees north), LONGITUDE (degrees west) to your location for accurate sunrise and sunset times
+
+uses logic from Mike Cherico's http://souptonuts.sourceforge.net/code/sunrise.c.html
+
+# exisiting copyrights
+
+## sunrise.c
+original Copyright (GPL) 2004   Mike Chirico mchirico@comcast.net
+
+## Vixie cron
+
 #/* Copyright 1988,1990,1993 by Paul Vixie
 # * All rights reserved
 # *
