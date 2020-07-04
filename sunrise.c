@@ -1,4 +1,8 @@
-/* Copyright (GPL) 2004   Mike Chirico mchirico@comcast.net
+/*
+
+modifications for cron by troy denton 2020
+
+original Copyright (GPL) 2004   Mike Chirico mchirico@comcast.net
 Updated: Sun Nov 28 15:15:05 EST 2004
 
 Program adapted by Mike Chirico mchirico@comcast.net

@@ -316,6 +316,8 @@ int	fqdn_in_subject;
 
 char	cron_default_mail_charset[MAX_ENVSTR] = "";
 
+float latitude=49.89507,longitude=97.138451;
+
 # if DEBUGGING
 int	DebugFlags;
 char	*DebugFlagNames[] = {	/* sync with #defines */

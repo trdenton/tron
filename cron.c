@@ -60,8 +60,6 @@ usage() {
 	exit(ERROR_EXIT);
 }
 
-void print_sunrise(double,double);
-
 int
 main(argc, argv)
 	int	argc;
@@ -346,9 +344,9 @@ find_jobs(vtime, db, doWild, doNonWild)
 			    env_get("LOGNAME", e->envp),
 			    e->uid, e->gid, e->cmd))
             //TODO use env vars for lat, long
-            if (e->flags & AT_SUNRISE && sunrise(tm,49.89507,97.138451)) {
+            if (e->flags & AT_SUNRISE && sunrise(tm,latitude,longitude)) {
                 job_add(e,u);
-            } else if (e->flags & AT_SUNSET && sunset(tm,49.89507,97.138451)) {
+            } else if (e->flags & AT_SUNSET && sunset(tm,latitude,longitude)) {
                 job_add(e,u);
             } else if (bit_test(e->minute, minute) &&
 			    bit_test(e->hour, hour) &&
