@@ -139,8 +139,11 @@ main(argc, argv)
 #endif
 
 	if ( get_lat_long() ) {
-		log_it("CRON",getpid(),"WARN","Could not get both lat/long - set LATITUDE and LONGITUDE env vars in e.g. /etc/default/cron.  Using winnipeg as default.");
+		log_it("CRON",getpid(),"WARN","Could not get both lat/long - set LATITUDE and LONGITUDE env vars in e.g. /etc/default/cron.  Using Winnipeg as default.");
 	}
+    char buff[512];
+    snprintf(buff,512,"Coordinates configured: %f degrees North, %f degrees West.",latitude,longitude);
+    log_it("CRON",getpid(),"INFO",buff);
 
 	/* Get the default locale character set for the mail
 	* "Content-Type: ...; charset=" header
@@ -388,7 +391,6 @@ find_jobs(vtime, db, doWild, doNonWild)
 			Debug(DSCH|DEXT, ("user [%s:%d:%d:...] cmd=\"%s\"\n",
 				env_get("LOGNAME", e->envp),
 				e->uid, e->gid, e->cmd))
-            //TODO use env vars for lat, long
             if (e->flags & AT_SUNRISE && sunrise(tm,latitude,longitude)) {
                 job_add(e,u);
             } else if (e->flags & AT_SUNSET && sunset(tm,latitude,longitude)) {
