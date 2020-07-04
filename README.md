@@ -4,9 +4,18 @@ A patched version of debian's "Vixie cron" to allow for @sunrise and @sunset
 
 Motivation: for scheduling parameter changes in Zoneminder.  Also, just a fun project.
 
-set env vars LATITUDE (degrees north), LONGITUDE (degrees west) to your location for accurate sunrise and sunset times
+Set env vars LATITUDE (degrees north), LONGITUDE (degrees west) to your location for accurate sunrise and sunset times.  This can be done in `/etc/default/cron`:
 
-uses logic from Mike Cherico's http://souptonuts.sourceforge.net/code/sunrise.c.html
+<pre>
+LATITUDE="49.89507"
+LONGITUDE="97.138451"
+</pre>
+
+
+The default is a location in Winnipeg, Canada.
+
+
+Uses logic from Mike Cherico's `sunrise.c` http://souptonuts.sourceforge.net/code/sunrise.c.html
 
 
 ## Example
