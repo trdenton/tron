@@ -8,6 +8,16 @@ set env vars LATITUDE (degrees north), LONGITUDE (degrees west) to your location
 
 uses logic from Mike Cherico's http://souptonuts.sourceforge.net/code/sunrise.c.html
 
+
+# Example
+
+Use @sunrise and @sunset in place of the normal time specification
+
+Test entries:
+
+`@sunrise echo "sunrise @ $(date)" >> /tmp/sunrise`
+`@sunset echo "sunset @ $(date)" >> /tmp/sunset`
+
 # exisiting copyrights
 
 ## sunrise.c
