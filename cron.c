@@ -60,6 +60,47 @@ usage() {
 	exit(ERROR_EXIT);
 }
 
+/*
+	helper function for get_lat_long
+*/
+static int 
+get_float_from_env(const char* name, float* dest) {
+	int rc = 1;
+	if (name && dest) {
+		char *val = getenv(name);
+		if (val) {
+			errno = 0; //a little odd, but recommended from 'man strtof'
+			char* endptr;
+			*dest = strtof(val,&endptr);
+			if (0 == errno && val != endptr) {
+				rc =0;
+			}
+		}
+	}
+	return rc;
+}
+
+/*
+	parse environment variables.
+	if not defined, defaults will be used instead.
+	populates global variables "latitude" and "longitude"
+
+	return codes:
+		0 - success
+		1 - did not find both values
+*/
+int 
+get_lat_long() {
+	float temp_lat,temp_long;
+	if (0 == get_float_from_env("LATITUDE",&temp_lat) && 
+		0 == get_float_from_env("LONGITUDE",&temp_long)) {
+		latitude = temp_lat;
+		longitude = temp_long;
+		return 0;
+	}
+	return 1;
+}
+
 int
 main(argc, argv)
 	int	argc;
@@ -96,6 +137,10 @@ main(argc, argv)
 #if defined(POSIX)
 	setenv("PATH", _PATH_DEFPATH, 1);
 #endif
+
+	if ( get_lat_long() ) {
+		log_it("CRON",getpid(),"WARN","Could not get both lat/long - set LATITUDE and LONGITUDE env vars in e.g. /etc/default/cron.  Using winnipeg as default.");
+	}
 
 	/* Get the default locale character set for the mail
 	* "Content-Type: ...; charset=" header
@@ -341,21 +386,21 @@ find_jobs(vtime, db, doWild, doNonWild)
 	for (u = db->head;  u != NULL;  u = u->next) {
 		for (e = u->crontab;  e != NULL;  e = e->next) {
 			Debug(DSCH|DEXT, ("user [%s:%d:%d:...] cmd=\"%s\"\n",
-			    env_get("LOGNAME", e->envp),
-			    e->uid, e->gid, e->cmd))
+				env_get("LOGNAME", e->envp),
+				e->uid, e->gid, e->cmd))
             //TODO use env vars for lat, long
             if (e->flags & AT_SUNRISE && sunrise(tm,latitude,longitude)) {
                 job_add(e,u);
             } else if (e->flags & AT_SUNSET && sunset(tm,latitude,longitude)) {
                 job_add(e,u);
             } else if (bit_test(e->minute, minute) &&
-			    bit_test(e->hour, hour) &&
-			    bit_test(e->month, month) &&
-			    ( ((e->flags & DOM_STAR) || (e->flags & DOW_STAR))
-			      ? (bit_test(e->dow,dow) && bit_test(e->dom,dom))
-			      : (bit_test(e->dow,dow) || bit_test(e->dom,dom)))) {
+				bit_test(e->hour, hour) &&
+				bit_test(e->month, month) &&
+				( ((e->flags & DOM_STAR) || (e->flags & DOW_STAR))
+				  ? (bit_test(e->dow,dow) && bit_test(e->dom,dom))
+				  : (bit_test(e->dow,dow) || bit_test(e->dom,dom)))) {
 				if ((doNonWild && !(e->flags & (MIN_STAR|HR_STAR)))
-				    || (doWild && (e->flags & (MIN_STAR|HR_STAR))))
+					|| (doWild && (e->flags & (MIN_STAR|HR_STAR))))
 					job_add(e, u);
 			}
 		}
@@ -401,7 +446,7 @@ cron_sleep(target)
 
 	seconds_to_wait = (int)(target * SECONDS_PER_MINUTE - t) + 1;
 	Debug(DSCH, ("[%d] TargetTime=%ld, sec-to-wait=%d\n",
-	    getpid(), (long)target*SECONDS_PER_MINUTE, seconds_to_wait))
+		getpid(), (long)target*SECONDS_PER_MINUTE, seconds_to_wait))
 
         if (seconds_to_wait > 0 && seconds_to_wait < 65)
             sleep((unsigned int) seconds_to_wait);
